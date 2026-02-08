@@ -32,18 +32,28 @@ def check_ticket():
 
         # Anchor to ticket grid
         ticket_grid = page.locator("section:has-text('VIP Premium')")
-
+       
+        print("---- TICKET GRID CONTENT ----")
+        print(ticket_grid.inner_text())
+        print("------------------------------")
+        
         # Locate BASIC card inside grid
-        basic_section = ticket_grid.locator("div:has-text('Basic')").first
+        basic_section = ticket_grid.locator("div").filter(
+            has=page.locator("text=Basic")
+        ).first        
         basic_count = basic_section.count()
 
         if basic_count == 0:
             print("Basic section not found")
             browser.close()
             return False
-
+            
+        print("---- BASIC SECTION CONTENT ----")
+        print(basic_section.inner_text())
+        print("--------------------------------")
+        
         # Check button inside Basic card
-        buy_button = basic_section.locator("text=BUY TICKETS")
+        buy_button = basic_section.locator("button:has-text('BUY TICKETS'):visible")
         buy_count = buy_button.count()
 
         available = buy_count > 0
@@ -75,6 +85,7 @@ while True:
 
 
     time.sleep(CHECK_INTERVAL)
+
 
 
 
