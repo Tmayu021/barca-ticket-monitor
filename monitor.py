@@ -32,6 +32,8 @@ def check_ticket():
 
         # Locate BASIC ticket block
         basic_section = page.locator("text=Basic").first
+        basic_count = basic_section.count()
+
 
         if basic_section.count() == 0:
             print("Basic section count = 0")
@@ -73,6 +75,7 @@ while True:
 
 
     time.sleep(CHECK_INTERVAL)
+
 
 
 
