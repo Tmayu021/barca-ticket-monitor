@@ -46,9 +46,9 @@ def check_ticket():
 
         grid_text = ticket_grid.inner_text().upper()
 
-        print("---- TICKET GRID TEXT ----")
-        print(grid_text)
-        print("--------------------------")
+        # print("---- TICKET GRID TEXT ----")
+        # print(grid_text)
+        # print("--------------------------")
 
         available = False
         
@@ -86,6 +86,7 @@ while True:
         print("ERROR:", e)
 
     time.sleep(CHECK_INTERVAL)
+
 
 
 
