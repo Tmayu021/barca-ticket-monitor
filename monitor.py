@@ -31,7 +31,7 @@ def check_ticket():
         page.wait_for_timeout(8000)
 
         # Anchor to ticket grid
-        ticket_grid = page.locator("section:has-text('VIP Premium')")
+        ticket_grid = page.locator("section:has-text('VIP Premium')").first
        
         print("---- TICKET GRID CONTENT ----")
         print(ticket_grid.inner_text())
@@ -85,6 +85,7 @@ while True:
 
 
     time.sleep(CHECK_INTERVAL)
+
 
 
 
