@@ -34,14 +34,20 @@ def check_ticket():
         basic_section = page.locator("text=Basic").first
 
         if basic_section.count() == 0:
+            print("Basic section count = 0")
             browser.close()
             return False
 
         # look for active BUY button inside Basic section
         buy_button = basic_section.locator("text=LET ME KNOW")
+        buy_count = buy_button.count()
 
-        available = buy_button.count() > 0
+        available = buy_count > 0
 
+        print(f"Basic section count = {basic_count}")
+        print(f"Buy button count = {buy_count}")
+        print(f"Available = {available}")
+        
         browser.close()
 
         return available
@@ -67,6 +73,7 @@ while True:
 
 
     time.sleep(CHECK_INTERVAL)
+
 
 
 
