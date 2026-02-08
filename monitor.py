@@ -51,14 +51,17 @@ def check_ticket():
         print("--------------------------")
 
         available = False
-
+        
+        basic_plus_block = ""
         if "BASIC PLUS" in grid_text:
             basic_plus_block = grid_text.split("BASIC PLUS")[1][:200]
 
-        if "BUY TICKETS" in basic_plus_block:
-            print("Basic Plus BUY detected")
-            available = True
+            if "BUY TICKETS" in basic_plus_block:
+                print("Basic Plus BUY detected")
+                available = True
 
+        browser.close()
+        return available
 
 # -----------------------------
 # MAIN LOOP
@@ -83,6 +86,7 @@ while True:
         print("ERROR:", e)
 
     time.sleep(CHECK_INTERVAL)
+
 
 
 
