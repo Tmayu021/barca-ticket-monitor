@@ -63,8 +63,9 @@ while True:
             alert_sent = False
 
     except Exception as e:
-        print(e)
+        print("ERROR:", e)
 
 
     time.sleep(CHECK_INTERVAL)
+
 
