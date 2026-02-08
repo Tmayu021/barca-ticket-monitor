@@ -33,10 +33,17 @@ def check_ticket():
         page = browser.new_page()
 
         page.goto(URL, timeout=60000)
+        
+        # Accept cookies if popup appears
+        try:
+            page.locator("button:has-text('Agree')").click(timeout=5000)
+            print("Cookie popup accepted")
+        except:
+            pass
 
         # wait for dynamic content
         page.wait_for_load_state("networkidle")
-        page.wait_for_timeout(5000)
+        page.wait_for_timeout(8000)
 
         # ------------------------------------
         # Find ALL BUY buttons on page
@@ -100,3 +107,4 @@ while True:
         print("ERROR:", e)
 
     time.sleep(CHECK_INTERVAL)
+
