@@ -43,9 +43,8 @@ def check_ticket():
         page = browser.new_page()
 
         page.goto(URL, timeout=60000)
-
-        # wait until ticket buttons are rendered
-        page.locator("button:has-text('BUY TICKETS')").first.wait_for()
+        page.wait_for_load_state("networkidle")
+        page.wait_for_timeout(5000)
 
         # -------------------------------------------------
         # Anchor ONLY to ticket grid (important)
@@ -114,5 +113,7 @@ while True:
 
     except Exception as e:
         print("ERROR:", e)
-
+        available = False
+        
     time.sleep(CHECK_INTERVAL)
+
