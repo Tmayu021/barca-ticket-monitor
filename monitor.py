@@ -38,7 +38,8 @@ def check_ticket():
         print("------------------------------")
         
         # Locate BASIC card inside grid
-        basic_section = ticket_grid.locator("div").filter(has=page.locator("text=Basic Plus")).first      
+        basic_section = ticket_grid.locator("div:has(h3:has-text('Basic Plus'))").first
+    
         basic_count = basic_section.count()
 
         if basic_count == 0:
@@ -83,6 +84,7 @@ while True:
 
 
     time.sleep(CHECK_INTERVAL)
+
 
 
 
