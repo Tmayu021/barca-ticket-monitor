@@ -29,8 +29,19 @@ def check_ticket():
 
     with sync_playwright() as p:
 
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
+        browser = p.chromium.launch(
+            headless=True,
+            args=["--disable-blink-features=AutomationControlled"]
+        )
+        
+        page = browser.new_page(
+            viewport={"width": 1366, "height": 900},
+            user_agent=(
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/120.0.0.0 Safari/537.36"
+            )
+        )
 
         page.goto(URL, timeout=60000)
         
@@ -107,4 +118,5 @@ while True:
         print("ERROR:", e)
 
     time.sleep(CHECK_INTERVAL)
+
 
