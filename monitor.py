@@ -3,77 +3,110 @@ import requests
 import time
 import os
 
-URL = "https://www.fcbarcelona.com/en/tickets/football/regular/laliga/fcbarcelona-celtadevigo?_gl=1*17hbrhh*_gcl_au*MTk5NTYzNzEwMS4xNzcwNTQxOTQ2"
-KEYWORD = "Basic"
 
+# ==============================
+# CONFIG
+# ==============================
+
+URL = "https://www.fcbarcelona.com/en/tickets/football/regular/laliga/fcbarcelona-celtadevigo"
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
 
-CHECK_INTERVAL = 1800  # CHECK EVERY 30 MINUTES
-# CHECK_INTERVAL = 300  # CHECK EVERY 5 MINUTES For Testing
+CHECK_INTERVAL = 1800   # 30 minutes
+# CHECK_INTERVAL = 300  # use for testing
 
+
+# ==============================
+# TELEGRAM ALERT
+# ==============================
 
 def send_alert(message):
     requests.get(
         f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
-        params={"chat_id": CHAT_ID, "text": message}
+        params={
+            "chat_id": CHAT_ID,
+            "text": message
+        }
     )
 
+
+# ==============================
+# MAIN CHECK FUNCTION
+# ==============================
+
 def check_ticket():
+
     with sync_playwright() as p:
+
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
 
         page.goto(URL, timeout=60000)
 
-        # wait for JS to fully load
-        page.locator("text=Basic").first.wait_for()
+        # wait until ticket buttons are rendered
+        page.locator("button:has-text('BUY TICKETS')").first.wait_for()
 
-        # Anchor to ticket grid
-        ticket_grid = page.locator("section:has-text('VIP Premium')").first
-       
-        print("---- TICKET GRID CONTENT ----")
-        print(ticket_grid.inner_text())
-        print("------------------------------")
-        
-        # Locate BASIC card inside grid
-        basic_section = ticket_grid.locator("div:has(h3:has-text('Basic Plus'))").first
-    
-        basic_count = basic_section.count()
+        # -------------------------------------------------
+        # Anchor ONLY to ticket grid (important)
+        # -------------------------------------------------
+        ticket_grid = page.locator(
+            "section:has(button:has-text('BUY TICKETS'))"
+        ).first
 
-        if basic_count == 0:
-            print("Basic section not found")
-            browser.close()
-            return False
-            
-        print("---- BASIC SECTION CONTENT ----")
-        print(basic_section.inner_text())
-        print("--------------------------------")
-        
-        # Check button inside Basic card
-        buy_button = basic_section.locator("button:has-text('BUY TICKETS'):visible")
-        buy_count = buy_button.count()
+        # -------------------------------------------------
+        # Find BUY buttons only inside ticket grid
+        # -------------------------------------------------
+        buy_buttons = ticket_grid.locator(
+            "button:has-text('BUY TICKETS'):visible"
+        )
 
-        available = buy_count > 0
+        available = False
+        total_buttons = buy_buttons.count()
 
-        print(f"Basic section count = {basic_count}")
-        print(f"Buy button count = {buy_count}")
+        print(f"BUY buttons detected in grid = {total_buttons}")
+
+        # -------------------------------------------------
+        # Check which card each BUY button belongs to
+        # Trigger only for Basic / Basic Plus
+        # -------------------------------------------------
+        for i in range(total_buttons):
+
+            button = buy_buttons.nth(i)
+
+            # get parent card text
+            card_text = button.locator(
+                "xpath=ancestor::div[1]"
+            ).inner_text().upper()
+
+            if "BASIC" in card_text:
+                print("Basic or Basic Plus BUY detected")
+                available = True
+                break
+
         print(f"Available = {available}")
 
         browser.close()
         return available
 
+
+# ==============================
+# MAIN LOOP
+# ==============================
+
 alert_sent = False
 
-# send_alert("Test alert — monitoring is running")
+# send_alert("Monitoring started")  # optional startup test
 
 while True:
+
     try:
         available = check_ticket()
 
         if available and not alert_sent:
-            send_alert("BASIC tickets AVAILABLE for COPA DEL REY, BUY NOW")
+            send_alert(
+                "FC Barcelona tickets AVAILABLE (Basic / Basic Plus) — BUY NOW"
+            )
             alert_sent = True
 
         if not available:
@@ -82,21 +115,4 @@ while True:
     except Exception as e:
         print("ERROR:", e)
 
-
     time.sleep(CHECK_INTERVAL)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
