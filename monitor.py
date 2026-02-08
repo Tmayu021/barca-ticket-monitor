@@ -10,6 +10,8 @@ KEYWORD = "Basic"
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
 
+CHECK_INTERVAL = 1800  # CHECK EVERY 30 MINUTES
+
 def send_alert(message):
     requests.get(
         f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
@@ -58,5 +60,6 @@ while True:
 
     except Exception as e:
         print(e)
+
 
     time.sleep(CHECK_INTERVAL)
