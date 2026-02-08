@@ -30,17 +30,19 @@ def check_ticket():
         # wait for JS to fully load
         page.wait_for_timeout(8000)
 
-        # Locate BASIC ticket block
-        basic_section = page.locator("text=Basic").first
+        # Anchor to ticket grid
+        ticket_grid = page.locator("section:has-text('VIP Premium')")
+
+        # Locate BASIC card inside grid
+        basic_section = ticket_grid.locator("div:has-text('Basic')").first
         basic_count = basic_section.count()
 
-
-        if basic_section.count() == 0:
-            print("Basic section count = 0")
+        if basic_count == 0:
+            print("Basic section not found")
             browser.close()
             return False
 
-        # look for active BUY button inside Basic section
+        # Check button inside Basic card
         buy_button = basic_section.locator("text=LET ME KNOW")
         buy_count = buy_button.count()
 
@@ -49,11 +51,9 @@ def check_ticket():
         print(f"Basic section count = {basic_count}")
         print(f"Buy button count = {buy_count}")
         print(f"Available = {available}")
-        
+
         browser.close()
-
         return available
-
 
 alert_sent = False
 
@@ -75,6 +75,7 @@ while True:
 
 
     time.sleep(CHECK_INTERVAL)
+
 
 
 
