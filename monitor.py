@@ -29,65 +29,36 @@ def check_ticket():
 
     with sync_playwright() as p:
 
-        browser = p.chromium.launch(
-            headless=True,
-            args=["--disable-blink-features=AutomationControlled"]
-        )
-        
-        page = browser.new_page(
-            viewport={"width": 1366, "height": 900},
-            user_agent=(
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/120.0.0.0 Safari/537.36"
-            )
-        )
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
 
         page.goto(URL, timeout=60000)
-        
-        # Accept cookies if popup appears
-        try:
-            page.locator("button:has-text('Agree')").click(timeout=5000)
-            print("Cookie popup accepted")
-        except:
-            pass
 
-        # wait for dynamic content
         page.wait_for_load_state("networkidle")
         page.wait_for_timeout(8000)
 
-        # ------------------------------------
-        # Find ALL BUY buttons on page
-        # ------------------------------------
-        buy_buttons = page.locator(
-            "button:has-text('BUY TICKETS'):visible"
-        )
+        # -----------------------------
+        # Locate ticket grid
+        # -----------------------------
+        ticket_grid = page.locator(
+            "section:has-text('VIP Premium')"
+        ).first
 
-        total_buttons = buy_buttons.count()
-        print(f"Total BUY buttons found = {total_buttons}")
+        grid_text = ticket_grid.inner_text().upper()
+
+        print("---- TICKET GRID TEXT ----")
+        print(grid_text)
+        print("--------------------------")
 
         available = False
 
-        # ------------------------------------
-        # Check which card owns the button
-        # ------------------------------------
-        for i in range(total_buttons):
-
-            button = buy_buttons.nth(i)
-
-            # go up to card container
-            card_text = button.locator(
-                "xpath=ancestor::div[1]"
-            ).inner_text().upper()
-
-            print(f"\n--- BUTTON {i+1} CARD ---")
-            print(card_text)
-
-            # trigger only for Basic or Basic Plus
-            if "BASIC" in card_text:
-                print("Basic / Basic Plus available")
-                available = True
-                break
+        # -----------------------------
+        # Logic:
+        # Basic Plus exists AND BUY present nearby
+        # -----------------------------
+        if "BASIC PLUS" in grid_text and "BUY TICKETS" in grid_text:
+            print("Basic Plus BUY detected")
+            available = True
 
         print(f"Available = {available}")
 
@@ -118,5 +89,6 @@ while True:
         print("ERROR:", e)
 
     time.sleep(CHECK_INTERVAL)
+
 
 
