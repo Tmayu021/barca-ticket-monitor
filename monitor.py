@@ -46,9 +46,9 @@ def check_ticket():
             browser.close()
             return False
             
-        # print("---- BASIC SECTION CONTENT ----")
-        # print(basic_section.inner_text())
-        # print("--------------------------------")
+        print("---- BASIC SECTION CONTENT ----")
+        print(basic_section.inner_text())
+        print("--------------------------------")
         
         # Check button inside Basic card
         buy_button = basic_section.locator("button:has-text('BUY TICKETS'):visible")
@@ -83,6 +83,7 @@ while True:
 
 
     time.sleep(CHECK_INTERVAL)
+
 
 
 
