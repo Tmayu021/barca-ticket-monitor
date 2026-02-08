@@ -4,7 +4,7 @@ import time
 import os
 
 
-URL = "https://www.fcbarcelona.com/en/tickets/football/regular/laliga/fcbarcelona-celtadevigo"
+URL = "https://www.fcbarcelona.com/en/tickets/football/regular/copa-del-rey/semifinals?_gl=1*6bsjgt*_gcl_au*MTk5NTYzNzEwMS4xNzcwNTQxOTQ2"
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
@@ -86,6 +86,7 @@ while True:
         print("ERROR:", e)
 
     time.sleep(CHECK_INTERVAL)
+
 
 
 
