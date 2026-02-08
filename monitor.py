@@ -38,7 +38,7 @@ def check_ticket():
             return False
 
         # look for active BUY button inside Basic section
-        buy_button = page.locator("text=BUY TICKETS")
+        buy_button = basic_section.locator("text=LET ME KNOW")
 
         available = buy_button.count() > 0
 
@@ -56,7 +56,7 @@ while True:
         available = check_ticket()
 
         if available and not alert_sent:
-            send_alert("BASIC tickets AVAILABLE for COPA DEL REY — BUY NOW")
+            send_alert("BASIC tickets AVAILABLE for COPA DEL REY — LET ME KNOW PHASE, DO NOT BUY NOW")
             alert_sent = True
 
         if not available:
@@ -67,5 +67,6 @@ while True:
 
 
     time.sleep(CHECK_INTERVAL)
+
 
 
