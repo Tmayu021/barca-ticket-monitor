@@ -3,7 +3,7 @@ import requests
 import time
 import os
 
-URL = "https://www.fcbarcelona.com/en/tickets/football/regular/copa-del-rey/semifinals?int=WB_25-26_K1125-32&btm_source=WebBarca&btm_medium=HeroBannerTKT&btm_campaign=FUTMASC-SEMIFINALSCOPADELREY2526_EN_TKT_FUT_WW&_gl=1*18rygk7*_gcl_au*MTk5NTYzNzEwMS4xNzcwNTQxOTQ2"
+URL = "https://www.fcbarcelona.com/en/tickets/football/regular/laliga/fcbarcelona-celtadevigo?_gl=1*17hbrhh*_gcl_au*MTk5NTYzNzEwMS4xNzcwNTQxOTQ2"
 KEYWORD = "Basic"
 
 
@@ -28,7 +28,7 @@ def check_ticket():
         page.goto(URL, timeout=60000)
 
         # wait for JS to fully load
-        page.wait_for_timeout(8000)
+        page.locator("text=Basic").first.wait_for()
 
         # Anchor to ticket grid
         ticket_grid = page.locator("section:has-text('VIP Premium')").first
@@ -38,9 +38,7 @@ def check_ticket():
         print("------------------------------")
         
         # Locate BASIC card inside grid
-        basic_section = ticket_grid.locator("div").filter(
-            has=page.locator("text=Basic")
-        ).first        
+        basic_section = ticket_grid.locator("div").filter(has=page.locator("text=Basic"))      
         basic_count = basic_section.count()
 
         if basic_count == 0:
@@ -48,18 +46,18 @@ def check_ticket():
             browser.close()
             return False
             
-        print("---- BASIC SECTION CONTENT ----")
-        print(basic_section.inner_text())
-        print("--------------------------------")
+        # print("---- BASIC SECTION CONTENT ----")
+        # print(basic_section.inner_text())
+        # print("--------------------------------")
         
         # Check button inside Basic card
-        buy_button = basic_section.locator("button:has-text('BUY TICKETS'):visible")
+        buy_button = basic_cards.locator("button:has-text('BUY TICKETS'):visible")
         buy_count = buy_button.count()
 
         available = buy_count > 0
 
-        # print(f"Basic section count = {basic_count}")
-        # print(f"Buy button count = {buy_count}")
+        print(f"Basic section count = {basic_count}")
+        print(f"Buy button count = {buy_count}")
         print(f"Available = {available}")
 
         browser.close()
@@ -85,6 +83,7 @@ while True:
 
 
     time.sleep(CHECK_INTERVAL)
+
 
 
 
