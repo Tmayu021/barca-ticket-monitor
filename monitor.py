@@ -51,7 +51,7 @@ def check_ticket():
         # print("--------------------------------")
         
         # Check button inside Basic card
-        buy_button = basic_cards.locator("button:has-text('BUY TICKETS'):visible")
+        buy_button = basic_section.locator("button:has-text('BUY TICKETS'):visible")
         buy_count = buy_button.count()
 
         available = buy_count > 0
@@ -83,6 +83,7 @@ while True:
 
 
     time.sleep(CHECK_INTERVAL)
+
 
 
 
