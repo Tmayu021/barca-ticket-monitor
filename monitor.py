@@ -10,8 +10,8 @@ KEYWORD = "Basic"
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
 
-#CHECK_INTERVAL = 1800  # CHECK EVERY 30 MINUTES
-CHECK_INTERVAL = 300  # CHECK EVERY 5 MINUTES For Testing
+CHECK_INTERVAL = 1800  # CHECK EVERY 30 MINUTES
+# CHECK_INTERVAL = 300  # CHECK EVERY 5 MINUTES For Testing
 
 
 def send_alert(message):
@@ -43,13 +43,13 @@ def check_ticket():
             return False
 
         # Check button inside Basic card
-        buy_button = basic_section.locator("text=LET ME KNOW")
+        buy_button = basic_section.locator("text=BUY TICKETS")
         buy_count = buy_button.count()
 
         available = buy_count > 0
 
-        print(f"Basic section count = {basic_count}")
-        print(f"Buy button count = {buy_count}")
+        # print(f"Basic section count = {basic_count}")
+        # print(f"Buy button count = {buy_count}")
         print(f"Available = {available}")
 
         browser.close()
@@ -57,14 +57,14 @@ def check_ticket():
 
 alert_sent = False
 
-send_alert("Test alert — monitoring is running")
+# send_alert("Test alert — monitoring is running")
 
 while True:
     try:
         available = check_ticket()
 
         if available and not alert_sent:
-            send_alert("BASIC tickets AVAILABLE for COPA DEL REY — LET ME KNOW PHASE, DO NOT BUY NOW")
+            send_alert("BASIC tickets AVAILABLE for COPA DEL REY, BUY NOW")
             alert_sent = True
 
         if not available:
@@ -75,6 +75,7 @@ while True:
 
 
     time.sleep(CHECK_INTERVAL)
+
 
 
 
