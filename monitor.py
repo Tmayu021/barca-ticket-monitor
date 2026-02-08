@@ -10,7 +10,9 @@ KEYWORD = "Basic"
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
 
-CHECK_INTERVAL = 1800  # CHECK EVERY 30 MINUTES
+#CHECK_INTERVAL = 1800  # CHECK EVERY 30 MINUTES
+CHECK_INTERVAL = 300  # CHECK EVERY 5 MINUTES For Testing
+
 
 def send_alert(message):
     requests.get(
@@ -47,6 +49,8 @@ def check_ticket():
 
 alert_sent = False
 
+send_alert("Test alert — monitoring is running")
+
 while True:
     try:
         available = check_ticket()
@@ -63,3 +67,4 @@ while True:
 
 
     time.sleep(CHECK_INTERVAL)
+
