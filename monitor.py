@@ -52,18 +52,12 @@ def check_ticket():
 
         available = False
 
-        # -----------------------------
-        # Logic:
-        # Basic Plus exists AND BUY present nearby
-        # -----------------------------
-        if "BASIC PLUS" in grid_text and "BUY TICKETS" in grid_text:
+        if "BASIC PLUS" in grid_text:
+            basic_plus_block = grid_text.split("BASIC PLUS")[1][:200]
+
+        if "BUY TICKETS" in basic_plus_block:
             print("Basic Plus BUY detected")
             available = True
-
-        print(f"Available = {available}")
-
-        browser.close()
-        return available
 
 
 # -----------------------------
@@ -89,6 +83,7 @@ while True:
         print("ERROR:", e)
 
     time.sleep(CHECK_INTERVAL)
+
 
 
 
