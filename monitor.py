@@ -43,7 +43,7 @@ def check_ticket():
         # Locate ticket grid
         # -----------------------------
         ticket_grid = page.locator(
-            "section:has-text('VIP Premium')"
+            "section:has-text('Basic')"
         ).first
 
         grid_text = ticket_grid.inner_text().upper()
@@ -53,17 +53,21 @@ def check_ticket():
         # print("--------------------------")
 
         available = False
+        basic_block = ""
         
-        basic_plus_block = ""
-        if "BASIC PLUS" in grid_text:
-            basic_plus_block = grid_text.split("BASIC PLUS")[1][:200]
-            available = True
-            # if "BUY TICKETS" in basic_plus_block:
-            #     print("Basic Plus BUY detected")
-            #     available = True
-
-        browser.close()
-        return available
+        if "BASIC" in grid_text and len(grid_text) > 200:
+    
+            # get text near BASIC card
+            basic_block = grid_text.split("BASIC")[1][:200]
+        
+            # state change detection
+            if (
+                "LET ME KNOW" not in basic_block
+                and
+                "TEMPORARILY UNAVAILABLE" not in basic_block
+            ):                
+                print("Basic state changed — LET ME KNOW removed")
+                available = True
 
 # -----------------------------
 # MAIN LOOP
@@ -77,7 +81,7 @@ while True:
 
         if available and not alert_sent:
             send_alert(
-                "FC Barcelona BASIC tickets AVAILABLE — BUY NOW"
+                "FC Barcelona BASIC tickets may be AVAILABLE — BUY NOW"
             )
             alert_sent = True
 
@@ -88,6 +92,7 @@ while True:
         print("ERROR:", e)
 
     time.sleep(CHECK_INTERVAL)
+
 
 
 
