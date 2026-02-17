@@ -68,6 +68,12 @@ def check_ticket():
             ):                
                 print("Basic state changed — LET ME KNOW removed")
                 available = True
+       
+        print(f"Available = {available}")
+
+        browser.close()
+        return available
+        
 
 # -----------------------------
 # MAIN LOOP
@@ -92,6 +98,7 @@ while True:
         print("ERROR:", e)
 
     time.sleep(CHECK_INTERVAL)
+
 
 
 
