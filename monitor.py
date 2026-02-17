@@ -9,8 +9,8 @@ URL = "https://www.fcbarcelona.com/en/tickets/football/regular/champions-league/
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
 
-# CHECK_INTERVAL = 1800
-CHECK_INTERVAL = 300
+CHECK_INTERVAL = 1200
+# CHECK_INTERVAL = 300
 
 
 
@@ -69,7 +69,7 @@ def check_ticket():
                 print("Basic state changed — LET ME KNOW removed")
                 available = True
        
-        print(f"Available = {available}")
+        # print(f"Available = {available}")
 
         browser.close()
         return available
@@ -98,6 +98,7 @@ while True:
         print("ERROR:", e)
 
     time.sleep(CHECK_INTERVAL)
+
 
 
 
