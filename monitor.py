@@ -9,7 +9,9 @@ URL = "https://www.fcbarcelona.com/en/tickets/football/regular/copa-del-rey/semi
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
 
-CHECK_INTERVAL = 1800
+# CHECK_INTERVAL = 1800
+CHECK_INTERVAL = 300
+
 
 
 # -----------------------------
@@ -55,10 +57,10 @@ def check_ticket():
         basic_plus_block = ""
         if "BASIC PLUS" in grid_text:
             basic_plus_block = grid_text.split("BASIC PLUS")[1][:200]
-
-            if "BUY TICKETS" in basic_plus_block:
-                print("Basic Plus BUY detected")
-                available = True
+            available = True
+            # if "BUY TICKETS" in basic_plus_block:
+            #     print("Basic Plus BUY detected")
+            #     available = True
 
         browser.close()
         return available
@@ -86,6 +88,7 @@ while True:
         print("ERROR:", e)
 
     time.sleep(CHECK_INTERVAL)
+
 
 
 
